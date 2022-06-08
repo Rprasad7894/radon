@@ -1,56 +1,16 @@
-const bookModel = require("../models/bookModel");
+const BookModel= require("../models/bookModel")
 
-//to create a new entry..use this api to create 11+ entries in your collection
-const createBook = async function (req, res) {
-  let data = req.body;
-  let savedData = await bookModel.create(data);
-  res.send({ msg: savedData });
-};
+const createBook= async function (req, res) {
+    let data= req.body
 
-// gives all the books- their bookName and authorName only
-const getBookData = async function (req, res) {
-  let allBooks = await bookModel
-    .find()
-    .select({ bookName: 1, authorName: 1, _id: 0 });
-  res.send({ msg: allBooks });
-};
+    let savedData= await BookModel.create(data)
+    res.send({msg: savedData})
+}
 
-//takes year as input in post request and gives list of all books published that year
-const getBooksInYear = async function (req, res) {
-  let publishedYear = req.body.year;
-  let books = await bookModel.find({ year: publishedYear });
-  res.send(books);
-};
+const getBooksData= async function (req, res) {
+    let allBooks= await BookModel.find(  { authorName : "SK" , isPublished: true }  )
+    res.send({msg: allBooks})
+}
 
-//request to return all books who have an Indian price tag of “100INR” or “200INR” or “500INR”
-const getXINRBooks = async function (req, res) {
-  let allBooks = await bookModel.find({
-    "price.indianPrice": { $in: ["100INR", "200INR", "500INR"] },
-  });
-  res.send(allBooks);
-};
-
-//returns books that are available in stock or have more than 500 pages
-const getRandomBooks = async function (req, res) {
-  let allBooks = await bookModel.find({
-    $or: [{ stockAvailable: true }, { totalPages: { $gt: 500 } }],
-  });
-  res.send(allBooks);
-};
-
-//take any input and use it as a condition to fetch books that satisfy that condition
-const getParticularBooks = async function (req, res) {
-  console.log(req.body)
-    let output=await BookModel.find(
-      req.body
-    )
-    res.send(output)
-};
-
-
-module.exports.createBook = createBook;
-module.exports.getBookData = getBookData;
-module.exports.getBooksInYear = getBooksInYear;
-module.exports.getXINRBooks = getXINRBooks;
-module.exports.getRandomBooks = getRandomBooks;
-module.exports.getParticularBooks = getParticularBooks;
+module.exports.createBook= createBook
+module.exports.getBooksData= getBooksData
