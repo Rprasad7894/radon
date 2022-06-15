@@ -1,23 +1,21 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-
-const authorController= require("../controllers/authorController")
-const bookController= require("../controllers/bookController")
+const userController = require("../controllers/userController");
+const { userVerification } = require("../middleware/auth");
 
 router.get("/test-me", function (req, res) {
-    res.send("My first ever api!")
-})
+  res.send("My first ever api!");
+});
 
-router.post("/createAuthor", authorController.createAuthor  )
+router.post("/users", userController.createUser);
 
-router.get("/getAuthorsData", authorController.getAuthorsData)
+router.post("/login", userController.loginUser);
 
-router.post("/createBook", bookController.createBook  )
+//The userId is sent by front end
+router.get("/users/:userId", userVerification, userController.getUserData);
 
-router.get("/getBooksData", bookController.getBooksData)
+router.put("/users/:userId", userVerification, userController.updateUser);
 
-router.get("/getBooksWithAuthorDetails", bookController.getBooksWithAuthorDetails)
-
-router.get("/getBooksWithAuthor_Publisher_Details", bookController.getBooksWithAuthor_Publisher_Details) 
+router.delete("/users/:userId", userVerification, userController.deleteUser);
 
 module.exports = router;
